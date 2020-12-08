@@ -1,0 +1,60 @@
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+  int n, c;
+  scanf("%d %d", &n, &c);
+  int * arr = new int[n];
+  for(int i = 0; i < n; i++)
+  {
+    scanf("%d", &arr[i]);
+  }
+  sort(arr, arr + n);
+  int start = 1;
+  int end = arr[n - 1];
+  int ans;
+  while(start <= end)
+  {
+    int idx = 0;
+    int cnt = 1;
+    int mid = (start + end) / 2;
+    while(idx < n)
+    {
+      bool flag = true;
+      for(int i = idx; i < n; i++)
+      {
+        if(arr[i] - arr[idx] >= mid)
+        {
+          idx = i;
+          cnt++;
+          flag = false;
+          break;
+        }
+      }
+      if(flag)
+      {
+        break;
+      }
+    }
+    if(cnt < c)
+    {
+      end = mid - 1;
+    } else  // cnt >= c
+    {
+      ans = mid;
+      start = mid + 1;
+    }
+  }
+  printf("%d\n", ans);
+}
+
+/*
+이제 좀 이분탐색에 대한 감을 잡은 것 같다. 
+문제엔 보이지 않지만 적당한 최솟값과 최댓값을 정해놓고
+그 안에서 범위를 줄여나가면서 답을 구하면 된다. 
+물론 무엇을 최솟값과 최댓값으로 놓고 줄여나갈 것인지가
+가장 어려우면서 중요한 문제라고 할 수 있겠다.
+*/
