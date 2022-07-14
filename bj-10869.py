@@ -1,0 +1,6 @@
+lis = input().split()
+print(int(lis[0]) + int(lis[1]))
+print(int(lis[0]) - int(lis[1]))
+print(int(lis[0]) * int(lis[1]))
+print(int(lis[0]) // int(lis[1]))
+print(int(lis[0]) % int(lis[1]))
