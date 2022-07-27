@@ -1,12 +1,9 @@
 #include <iostream>
 #include <cstdio>
-#include <map>
-#include <queue>
+#include <set>
 using namespace std;
 
-map<int, int> check;
-priority_queue<int> maxHeap;
-priority_queue<int> minHeap;
+multiset<int> heap;
 
 int main()
 {
@@ -17,84 +14,38 @@ int main()
     for(int h = 0; h < t; h++)
     {
         scanf("%d", &k);
-        int cnt = 0;
-        check.clear();  
-        maxHeap = priority_queue<int>();
-        minHeap = priority_queue<int>();
+        heap.clear();
         for(int i = 0; i < k; i++)
         {
             scanf("%s %d", cmd, &n);
             if(cmd[0] == 'I')
             {
-                cnt++;
-                maxHeap.push(n);
-                minHeap.push(-n);
-                if(check.find(n) != check.end())
-                {
-                    check[n]++;
-                } else 
-                {
-                    check[n] = 1;
-                }
+                heap.insert(n);
             } else 
             {
                 // 최대값 삭제
                 if(n == 1)
                 {
-                    while(!maxHeap.empty())
+                    if(!heap.empty())
                     {
-                        int tmp = maxHeap.top();
-                        maxHeap.pop();
-                        if(check[tmp] > 0)
-                        {
-                            cnt--;
-                            check[tmp]--;
-                            break;
-                        }
+                        heap.erase(--heap.end());
                     }
                 } else 
                 {
-                    while(!minHeap.empty())
+                    if(!heap.empty())
                     {
-                        int tmp = -minHeap.top();
-                        minHeap.pop();
-                        if(check[tmp] > 0)
-                        {
-                            cnt--;
-                            check[tmp]--;
-                            break;
-                        }
+                        heap.erase(heap.begin());
                     }
                 }
             }
         }
-        if(cnt <= 0)
+        if(heap.empty())
         {
             printf("EMPTY\n");
-            continue;
-        }
-        int big, small;
-        while(!maxHeap.empty())
+        } else 
         {
-            int tmp = maxHeap.top();
-            maxHeap.pop();
-            if(check[tmp] > 0)
-            {
-                big = tmp;
-                break;
-            }
+            printf("%d %d\n", *heap.rbegin(), *heap.begin());
         }
-        while(!minHeap.empty())
-        {
-            int tmp = -minHeap.top();
-            minHeap.pop();
-            if(check[tmp] > 0)
-            {
-                small = tmp;
-                break;
-            }
-        }
-        printf("%d %d\n", big, small);
     }
     return 0;
 }
