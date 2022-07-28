@@ -2,11 +2,15 @@ import sys
 n = int(sys.stdin.readline())
 m = int(sys.stdin.readline())
 s = sys.stdin.readline().strip()
-s = s.replace('II', 'I I')
-s = s.replace('OO', 'O O')
-s = s.replace('IIO', 'I IO')
-s = s.replace('OOI', 'OO I')
-s = s.split()
-s = [(len(i) - 1) // 2 for i in s]
-ans = sum([i - n + 1 for i in s if i >= n])
-print(ans)
+prev = 'O' if s[0] == 'I' else 'I'
+lis = []
+cnt = 0
+for i in s:
+    if(i == prev):
+        lis.append(cnt - 1)
+        cnt = 1 if i == 'I' else 0
+    else:
+        prev = i 
+        if(i == 'I'): cnt += 1
+lis.append(cnt - 1)
+print(sum([i - n + 1 for i in lis if i >= n]))
