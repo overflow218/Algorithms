@@ -1,40 +1,61 @@
 #include <iostream>
 #include <cstdio>
+#include <vector>
 using namespace std;
 
-int dx1[] = {0, 0, 0, 0};
-int dy1[] = {0, 1, 2, 3};
-
-int dx2[] = {0, 0, 1, 1};
-int dy2[] = {0, 1, 0, 1};
-
-int dx3[] = {0, 1, 2, 2};
-int dy3[] = {0, 0, 0, 1};
-
-int dx4[] = {0, 0, 1, 1};
-int dy4[] = {0, 1, 1, 2};
-
-int dx5[] = {0, 0, 0, 1};
-int dy5[] = {0, 1, 2, 1};
-
 int ans = 0, n, m;
+int dx[] = {1, -1, 0};
+int dy[] = {0, 0, 1};
+int dx2[][4] = {{0, 0, 0, 1}, {0, 1, 2, 1}, {0, 0, 0, -1}, {0, 1, 2, 1}};
+int dy2[][4] = {{0, 1, 2, 1}, {0, 0, 0, 1}, {0, 1, 2, 1}, {0, 0, 0, -1}};
+
 int arr[500][500] = {0};
+bool isVisited[500][500] = {false};
 
-int dx[][5] = {{0, 0, 0, 0}, {0, 0, 1, 1}, {0, 1, 2, 2}, {0, 0, 1, 1}, {0, 0, 0, 1}};
-int dy[][5] = {{0, 1, 2, 3}, {0, 1, 0, 1}, {0, 0, 0, 1}, {0, 1, 1, 2}, {0, 1, 2, 1}};
-
-void go(int x, int y, int type)
+int calculate(vector<pair<int, int> > &chosen)
 {
-    for(int i = 0; i < 4; i++)
-    {
-        if(x + dx[type][i] < 0 || x + dx[type][i] >= n || y + dy[type][i] < 0 || y + dy[type][i] >= m) return;
-    }
     int tmp = 0;
     for(int i = 0; i < 4; i++)
     {
-        tmp += arr[x + dx[type][i]][y + dy[type][i]];
+        tmp += arr[chosen[i].first][chosen[i].second];
     }
-    ans = max(ans, tmp);
+    return tmp;
+}
+
+void go(int x, int y, vector<pair<int, int> > &chosen)
+{
+    if(chosen.size() == 4)
+    {
+        ans = max(ans, calculate(chosen));
+        return;
+    }
+    if(x < 0 || x >= n || y < 0 || y >= m || isVisited[x][y]) return;
+    isVisited[x][y] = true;
+    chosen.push_back(make_pair(x, y));
+    for(int i = 0; i < 3; i++)
+    {
+        go(x + dx[i], y + dy[i], chosen);
+    }
+    chosen.pop_back();
+    isVisited[x][y] = false;
+}
+
+void go2(int x, int y, vector<pair<int, int> > &chosen)
+{
+    for(int i = 0; i < 4; i++)
+    {
+        for(int j = 0; j < 4; j++)
+        {
+            int tx = x + dx2[i][j], ty = y + dy2[i][j];
+            if(tx < 0 || tx >= n || ty < 0 || ty >= m) break;
+            chosen.push_back(make_pair(tx, ty));
+        }
+        if(chosen.size() == 4)
+        {
+            ans = max(ans, calculate(chosen));
+        }
+        chosen.clear();
+    }
 }
 
 int main()
@@ -48,14 +69,13 @@ int main()
         }
     }
 
+    vector<pair<int, int> > vec;
     for(int i = 0; i < n; i++)
     {
         for(int j = 0; j < m; j++)
         {
-            for(int k = 0; k < 5; k++)
-            {
-                go(i, j, k);
-            }
+            go(i, j, vec);
+            go2(i, j, vec);
         }
     }
     printf("%d\n", ans);
