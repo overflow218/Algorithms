@@ -8,6 +8,15 @@
     "string": "cpp",
     "map": "cpp",
     "queue": "cpp",
-    "list": "cpp"
+    "list": "cpp",
+    "__hash_table": "cpp",
+    "__split_buffer": "cpp",
+    "__tree": "cpp",
+    "array": "cpp",
+    "deque": "cpp",
+    "initializer_list": "cpp",
+    "ios": "cpp",
+    "string_view": "cpp",
+    "unordered_map": "cpp"
   }
 }
