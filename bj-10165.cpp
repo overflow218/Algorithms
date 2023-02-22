@@ -3,7 +3,6 @@
 #include <algorithm>
 using namespace std;
 
-
 struct bus {
     int start;
     int end;
@@ -16,19 +15,8 @@ bool isDeleted[500001] = {false};
 
 bool cmp(bus a, bus b)
 {
-    if(a.start != b.start) return a.start < b.start;
-    return a.end < b.end;
-}
-
-// a가 b를 포함하면 1, 포함은 안해도 만나긴 하면 0, 만나지도 않으면 -1
-// a의 시작이 무조건 b보다 작거나 같음
-int check(bus &a, bus &b)
-{
-    int s1 = a.start, e1 = a.end, s2 = b.start, e2 = b.end;
-
-    if(e1 <= s2) return -1;
-    if(e2 <= e1) return 1;
-    return 0;
+    if(a.end != b.end) return a.end < b.end;
+    return a.start < b.start;
 }
 
 int main()
@@ -56,24 +44,27 @@ int main()
     sort(busLine.begin(), busLine.end(), cmp);
 
     int limit = busLine.size();
-    for(int i = 0; i < limit; i++)
+    bus minimum = busLine[limit - 1];
+    for(int i = limit - 2; i >= 0; i--)
     {
-        int busNumer = busLine[i].number;
-        if(isDeleted[busNumer]) continue;
+        
+        int s = busLine[i].start, e = busLine[i].end, number = busLine[i].number;
 
-        for(int j = i + 1; j < limit; j++)
+        // i번째 노선에 현재 minimum이 포함됨. 
+        if(e == minimum.end)
         {
-            int nextNumber = busLine[j].number;
-            if(isDeleted[nextNumber]) continue;
-            int code = check(busLine[i], busLine[j]);
-            
-            // 안겹치면 종료
-            if(code == -1) break;
-            // i 버스 노선에 j 버스 노선이 포함됨
-            if(code == 1)
-            {
-                isDeleted[nextNumber] = true;
-            }
+            isDeleted[minimum.number] = true;
+            minimum = busLine[i];
+        } 
+        // 현재 minimum에 i번째 노선이 포함됨
+        else if(minimum.start <= s)
+        {  
+            isDeleted[number] = true;
+        } 
+        // 위의 두가지 경우가 아니라면 minimum을 새롭게 갱신해준다.
+        else 
+        {
+            minimum = busLine[i];
         }
     }
 
