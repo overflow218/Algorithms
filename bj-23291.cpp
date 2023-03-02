@@ -48,98 +48,197 @@ int main()
             if(arr[0][i] == small) arr[0][i]++;
         }
             
-        // gogo();
         // 2. 어항쌓기
         // 시작하는 곳 인덱스, 한줄에 있는 블록의 개수.
         int start = 0, width = 1, height = 1;
         while(true)
         {
-            printf("star: %d, w: %d, h: %d\n", start, width, height);
             for(int it = 1; it <= width; it++)
             {
                 for(int i = 0; i < height; i++)
                 {
-                    arr[start + i][it] = arr[start - it][i];
-                    arr[start - it][i] = 0;
+                    arr[it][start + width + i] = arr[i][start + width - it];
+                    arr[i][start + width - it] = 0;
                 }
             }
             start += width;
             int tmp = width;
             width = height;
             height = tmp + 1;
-            // 멈춰야하는건 
-            
-            gogo();
             if(start + width + height > n) break;
         }
 
         // 3. 인접한 애들에 대해서 물고기 수 조절
         for(int x = 0; x < n; x++)
         {
-            if(arr[x][0] == 0) continue;
+            if(arr[0][x] == 0) continue;
             for(int y = 0; y < n; y++)
             {
-                if(arr[x][y] == 0) break;
-                // 위에 칸 확인.
-                if(arr[x][y + 1] > 0)
+                if(arr[y][x] == 0) break;
+                // 오른쪽 옆에 칸 확인
+                if(arr[y][x + 1] > 0)
                 {
-                    int diff = abs(arr[x][y] - arr[x][y + 1]) / 5;
+                    int diff = abs(arr[y][x] - arr[y][x + 1]) / 5;
                     if(diff > 0)
                     {
-                        if(arr[x][y] < arr[x][y + 1])
+                        if(arr[y][x] < arr[y][x + 1])
                         {
-                            tmpCount[x][y] += diff;
-                            tmpCount[x][y + 1] -= diff;
+                            tmpCount[y][x] += diff;
+                            tmpCount[y][x + 1] -= diff;
                         } else 
                         {
-                            tmpCount[x][y] -= diff;
-                            tmpCount[x][y + 1] += diff;
+                            tmpCount[y][x] -= diff;
+                            tmpCount[y][x + 1] += diff;
                         }
                     }
                 }
-                // 오른쪽 옆에 칸 확인
-                if(arr[x + 1][y] > 0)
+                // 위에 칸 칸 확인
+                if(arr[y + 1][x] > 0)
                 {
-                    int diff = abs(arr[x][y] - arr[x + 1][y]) / 5;
+                    int diff = abs(arr[y][x] - arr[y + 1][x]) / 5;
                     if(diff > 0)
                     {
-                        if(arr[x][y] < arr[x + 1][y])
+                        if(arr[y][x] < arr[y + 1][x])
                         {
-                            tmpCount[x][y] += diff;
-                            tmpCount[x][y + 1] -= diff;
+                            tmpCount[y][x] += diff;
+                            tmpCount[y + 1][x] -= diff;
                         } else 
                         {
-                            tmpCount[x][y] -= diff;
-                            tmpCount[x][y + 1] += diff;
+                            tmpCount[y][x] -= diff;
+                            tmpCount[y + 1][x] += diff;
                         }
                     }
                 }
             }
         }
 
-        // 4.다시 일렬로 놓기
-        vector<int> tmp;
+        // 조절내용 반영
         for(int x = 0; x < n; x++)
         {
-            if(arr[x][0] == 0) continue;
+            if(arr[0][x] == 0) continue;
             for(int y = 0; y < n; y++)
             {
-                if(arr[x][y] == 0) break;
-                tmp.push_back(arr[x][y]);
-                arr[x][y] = 0;
+                if(arr[y][x] == 0) break;
+                arr[y][x] += tmpCount[y][x];
+                tmpCount[y][x] = 0;
             }
-        }   
-        printf("tmp: %d\n", tmp.size());
-        // assert(tmp.size() == n);     
-        // for(int i = 0; i < n; i++)
-        // {
-        //     arr[i][0] = tmp[i];
-        //     printf("%d ", arr[i][0]);
-        // }
+        }
 
-        break;
+        // 4.다시 일렬로 놓기
+        vector<int> tmp;
+
+        for(int x = 0; x < n; x++)
+        {
+            if(arr[0][x] == 0) continue;
+            for(int y = 0; y < n; y++)
+            {
+                if(arr[y][x] == 0) break;
+                tmp.push_back(arr[y][x]);
+                arr[y][x] = 0;
+            }
+        }
+
+        for(int i = 0; i < n; i++)
+        {
+            arr[0][i] = tmp[i];
+        }
+
         // 5. 지랄난 공중부양
+        start = 0, width = n/2, height = 1;
+        int cnt = 0;
+        while(cnt < 2)
+        {
+            cnt++;
+            for(int i = 0; i < width; i++)
+            {
+                for(int j = 0; j < height; j++)
+                {
+                    arr[2 * height - 1 - j][start + 2 * width - 1 - i] = arr[j][start + i];
+                    arr[j][start + i] = 0;
+                }
+            }
+            start += width;
+            int tmp = width;
+            width /= 2;
+            height *= 2;
+            // if(width == 1) break;
+        }
 
+
+        // 6. 인접한 애들에 대해서 물고기 수 조절
+        for(int x = 0; x < n; x++)
+        {
+            if(arr[0][x] == 0) continue;
+            for(int y = 0; y < n; y++)
+            {
+                if(arr[y][x] == 0) break;
+                // 오른쪽 옆에 칸 확인
+                if(arr[y][x + 1] > 0)
+                {
+                    int diff = abs(arr[y][x] - arr[y][x + 1]) / 5;
+                    if(diff > 0)
+                    {
+                        if(arr[y][x] < arr[y][x + 1])
+                        {
+                            tmpCount[y][x] += diff;
+                            tmpCount[y][x + 1] -= diff;
+                        } else 
+                        {
+                            tmpCount[y][x] -= diff;
+                            tmpCount[y][x + 1] += diff;
+                        }
+                    }
+                }
+                // 위에 칸 칸 확인
+                if(arr[y + 1][x] > 0)
+                {
+                    int diff = abs(arr[y][x] - arr[y + 1][x]) / 5;
+                    if(diff > 0)
+                    {
+                        if(arr[y][x] < arr[y + 1][x])
+                        {
+                            tmpCount[y][x] += diff;
+                            tmpCount[y + 1][x] -= diff;
+                        } else 
+                        {
+                            tmpCount[y][x] -= diff;
+                            tmpCount[y + 1][x] += diff;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 조절내용 반영
+        for(int x = 0; x < n; x++)
+        {
+            if(arr[0][x] == 0) continue;
+            for(int y = 0; y < n; y++)
+            {
+                if(arr[y][x] == 0) break;
+                arr[y][x] += tmpCount[y][x];
+                tmpCount[y][x] = 0;
+            }
+        }
+
+        // 7.다시 일렬로 놓기
+        tmp.clear();
+
+        for(int x = 0; x < n; x++)
+        {
+            if(arr[0][x] == 0) continue;
+            for(int y = 0; y < n; y++)
+            {
+                if(arr[y][x] == 0) break;
+                tmp.push_back(arr[y][x]);
+                arr[y][x] = 0;
+            }
+        }
+
+        for(int i = 0; i < n; i++)
+        {
+            arr[0][i] = tmp[i];
+        }
     }
 
     cout << ans << '\n';
