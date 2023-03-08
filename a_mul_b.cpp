@@ -69,6 +69,7 @@ void add(vector<int> &vec1, vector<int> &vec2)
 }
 
 // vec1이 더 큰거라고 가정하고 vec1에 빼줄거임. 
+// 음 왠지 틀리는게 빼기에서 뭔가 잘못되는거 같은데 ㅋㅋ..
 void subtract(vector<int> &vec1, vector<int> &vec2)
 {
     for(int i = 0; i < vec2.size(); i++)
@@ -113,7 +114,7 @@ vector<int> karatuba(vector<int> a, vector<int> b)
 
     // 그리고 크기가 작은경우에는 그냥 곱하는게 빠르니까 그렇게 구현해주기
     int size = a.size();
-    if(size <= 1000)
+    if(size <= 100)
     {
         return simpleMultiply(a, b);
     }
