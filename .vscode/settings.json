@@ -67,6 +67,7 @@
     "type_traits": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp",
-    "functional": "cpp"
+    "functional": "cpp",
+    "fstream": "cpp"
   }
 }
