@@ -7,6 +7,7 @@ public:
     int m, n, k = 0;
     int block[30][30][64] = {0};
     const int INF = 10000;
+    
     int find(int x, int y, int key, vector<string>& grid)
     {
         if(x < 0 || x == m || y < 0 || y == n) return INF;
