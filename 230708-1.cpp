@@ -107,18 +107,14 @@ int main() {
         int cost2 = 1000000;
         for(int i = 0; i < n; i++)
         {
-            if(costA[i][0] == -1 || costB[i][0] == -1) continue;
-            if(costA[i][m - 1] == -1 || costB[i][m - 1] == -1) continue;
-            cost2 = min(cost2, costA[i][0] + costB[i][0]);
-            cost2 = min(cost2, costA[i][m - 1] + costB[i][m - 1]);
+            if(costA[i][0] != -1 && costB[i][0] != -1) cost2 = min(cost2, costA[i][0] + costB[i][0]);
+            if(costA[i][m - 1] != -1 && costB[i][m - 1] != -1) cost2 = min(cost2, costA[i][m - 1] + costB[i][m - 1]);
         }
 
         for(int i = 0; i < m; i++)
         {
-            if(costA[0][i] == -1 || costB[0][i] == -1) continue;
-            if(costA[n - 1][i] == -1 || costB[n - 1][i] == -1) continue;
-            cost2 = min(cost2, costA[0][i] + costB[0][i]);
-            cost2 = min(cost2, costA[n - 1][i] + costB[n - 1][i]);
+            if(costA[0][i] != -1 || costB[0][i] != -1) cost2 = min(cost2, costA[0][i] + costB[0][i]);
+            if(costA[n - 1][i] != -1 || costB[n - 1][i] != -1) cost2 = min(cost2, costA[n - 1][i] + costB[n - 1][i]);
         }
 
         printf("#%d %d\n", test, cost1 + cost2 + cost3);
