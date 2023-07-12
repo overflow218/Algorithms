@@ -47,13 +47,11 @@ public:
         while(!q.empty())
         {
             int limit = q.size();
-            printf("dist: %d, limit: %d\n", dist, limit);
             for(int i = 0; i < limit; i++)
             {
                 TreeNode* tmp = q.front();
                 q.pop();
                 if(tmp == NULL || isVisited[tmp -> val]) continue;
-                printf("dist: %d, val: %d\n", dist, tmp -> val);
                 isVisited[tmp -> val] = true;
                 ans = max(ans, dist);
                 if(tmp -> left) q.push(tmp -> left);
