@@ -68,6 +68,7 @@
     "typeinfo": "cpp",
     "variant": "cpp",
     "functional": "cpp",
-    "fstream": "cpp"
+    "fstream": "cpp",
+    "filesystem": "cpp"
   }
 }
