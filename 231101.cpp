@@ -1,4 +1,3 @@
-# leetcode 529번
 class Solution {
 public:
     int dx[8] = {0, 0, 1, -1, -1, -1, 1, 1};
@@ -22,11 +21,11 @@ public:
             {
                 int nx = x + dx[i], ny = y + dy[i];
                 if(nx < 0 || nx == m || ny < 0 || ny == n) continue;
-                if(board[nx][ny] == 'X') cnt++;
+                if(board[nx][ny] == 'M') cnt++;
             }
             if(cnt > 0)
             {
-                board[x][y] = cnt;
+                board[x][y] = '0' + cnt;
                 return;
             }
             board[x][y] = 'B';
